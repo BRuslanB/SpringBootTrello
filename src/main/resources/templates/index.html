@@ -1,0 +1,160 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+            layout:decorate = "layout/main.html">
+  <div layout:fragment = "mainContent">
+    <!-- Button Add Folder -->
+    <div class="row">
+      <div class="col-12 my-2">
+        <button type="button" class="button_style"
+          data-bs-toggle="modal" data-bs-target="#addFolderModal"
+          th:text="'+' + #{button.newFolder}">
+        </button>
+      </div>
+    </div>
+    <!-- List of Folders -->
+    <div class="row">
+      <div class="container mx-auto">
+        <div class="col-12 card-deck row mx-auto">
+          <div class="col-12 p-2 mx-auto"
+            th:each="fld : ${folders}">
+            <div class="card border-light border-2">
+              <div class="card-header bg-light">
+                <span class="fw-bold"
+                  th:text="${fld.name}">
+                </span>
+              </div>
+              <div class="card-body">
+                <span>
+                  <a class="btn btn-primary"
+                    th:href="@{'/detailsfolder/' + ${fld.id}}"
+                    th:text="#{label.details}">
+                  </a>
+                </span>
+                <span>
+                  <button class="btn btn-success ms-2"
+                    data-bs-toggle="modal" th:data-bs-target="'#editFolderModal' + ${fld.id}"
+                    th:text="#{label.edit}">
+                  </button>
+                </span>
+                <span>
+                  <button class="btn btn-danger ms-2"
+                    data-bs-toggle="modal" th:data-bs-target="'#deleteFolderModal' + ${fld.id}"
+                    th:text="#{label.delete}">
+                  </button>
+                </span>
+                <!-- Modal Edit Folder -->
+                <div class="modal fade" th:id="'editFolderModal' + ${fld.id}"
+                  data-bs-backdrop="static" data-bs-keyboard="false"
+                  tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <form th:action="@{'/editfolder'}" method="post">
+                        <input type="hidden" name="folder_id" th:value="${fld.id}">
+                        <div class="modal-header">
+                          <h5 class="modal-title"
+                            th:text="#{modal.titleModalEditFolder}">
+                          </h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="row mt-3">
+                            <div class="col-12">
+                              <label
+                                th:text="#{label.folderName}">
+                              </label>
+                            </div>
+                          </div>
+                          <div class="row mt-2">
+                            <div class="col-12">
+                              <input type="text" class="form-control" name="folder_name" required
+                                th:value="${fld.name}">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                            th:text="#{button.close}">
+                          </button>
+                          <button class="btn btn-primary"
+                            th:text="#{button.saveFolder}">
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <!-- Modal Delete Folder -->
+                <div class="modal fade" th:id="'deleteFolderModal' + ${fld.id}"
+                     data-bs-backdrop="static" data-bs-keyboard="false"
+                     tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <form th:action="@{'/deletefolder'}" method="post">
+                        <input type="hidden" name="folder_id" th:value="${fld.id}">
+                        <div class="modal-header">
+                          <h5 class="modal-title" th:text="#{modal.titleModalDeleteFolder}"></h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <h6 th:text="#{message.confirmDeleteFolder}"></h6>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                            th:text="#{button.cancel}"></button>
+                          <button class="btn btn-danger" th:text="#{button.delete}"></button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal Add Folder -->
+    <div class="modal fade" id="addFolderModal"
+      data-bs-backdrop="static" data-bs-keyboard="false"
+      tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <form th:action="@{'/addfolder'}" method="post">
+            <div class="modal-header">
+              <h5 class="modal-title"
+                th:text="#{modal.titleModalAddFolder}">
+              </h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"
+                aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="row mt-3">
+                <div class="col-12">
+                  <label
+                    th:text="#{label.folderName}">
+                  </label>
+                </div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-12">
+                  <input type="text" class="form-control" name="folder_name" required>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                th:text="#{button.close}">
+              </button>
+              <button class="btn btn-primary"
+                th:text="#{button.addFolder}">
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</html>

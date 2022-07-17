@@ -1,0 +1,157 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+            layout:decorate="layout/main.html"
+      xmlns="http://www.w3.org/1999/html">
+  <div layout:fragment = "mainContent">
+    <!-- Button Add Category -->
+    <div class="row">
+      <div class="col-12 my-2">
+        <button type="button" class="button_style"
+          data-bs-toggle="modal" data-bs-target="#addCategoryModal"
+          th:text="'+' + #{button.newCategory}">
+        </button>
+      </div>
+    </div>
+    <!-- List of Categories -->
+    <div class="row">
+      <div class="col-12 mt-3">
+        <table class="table table-striped">
+          <thead>
+            <tr class="fw-bold">
+              <td th:text="#{label.id}"></td>
+              <td th:text="#{label.category}"></td>
+              <td width="10%" th:text="#{label.details}"></td>
+              <td width="10%" th:text="#{label.delete}"></td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="cat : ${taskCategories}">
+              <td th:text="${cat.id}"></td>
+              <td th:text="${cat.name}"></td>
+              <td>
+                <button class="btn btn-primary btn-sm"
+                  data-bs-toggle="modal" data-bs-target="#editCategoryModal"
+                  th:text="#{button.viewMore}">
+                </button>
+              </td>
+              <td>
+                <button class="btn btn-danger btn-sm"
+                  data-bs-toggle="modal" data-bs-target="#deleteCategoryModal"
+                  th:text="#{label.delete}">
+                </button>
+              </td>
+              <!-- Modal Edit Category -->
+              <div class="modal fade" id="editCategoryModal"
+                data-bs-backdrop="static" data-bs-keyboard="false"
+                tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <form th:action="@{'/editcategory'}" method="post">
+                      <input type="hidden" name="category_id" th:value="${cat.id}">
+                      <div class="modal-header">
+                        <h5 class="modal-title"
+                          th:text="#{modal.titleModalEditCategory}">
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                          aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="row mt-3">
+                          <div class="col-12">
+                            <label
+                              th:text="#{label.categoryName}">
+                            </label>
+                          </div>
+                        </div>
+                        <div class="row mt-2">
+                          <div class="col-12">
+                            <input type="text" class="form-control" name="category_name" required
+                             th:value="${cat.name}">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                          th:text="#{button.close}">
+                        </button>
+                        <button class="btn btn-primary"
+                          th:text="#{button.saveCategory}">
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <!-- Modal Delete Category -->
+              <div class="modal fade" id="deleteCategoryModal"
+                   data-bs-backdrop="static" data-bs-keyboard="false"
+                   tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <form th:action="@{'/deletecategory'}" method="post">
+                      <input type="hidden" name="category_id" th:value="${cat.id}">
+                      <div class="modal-header">
+                        <h5 class="modal-title" th:text="#{modal.titleModalDeleteCategory}"></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                          aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <h6 th:text="#{message.confirmDeleteCategory}"></h6>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                          th:text="#{button.cancel}"></button>
+                        <button class="btn btn-danger" th:text="#{button.delete}"></button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- Modal Add Category -->
+    <div class="modal fade" id="addCategoryModal"
+         data-bs-backdrop="static" data-bs-keyboard="false"
+         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <form th:action="@{'/addcategory'}" method="post">
+            <div class="modal-header">
+              <h5 class="modal-title"
+                th:text="#{modal.titleModalAddCategory}">
+              </h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"
+                aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="row mt-3">
+                <div class="col-12">
+                  <label
+                    th:text="#{label.categoryName}">
+                  </label>
+                </div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-12">
+                  <input type="text" class="form-control" name="category_name" required>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                th:text="#{button.close}">
+              </button>
+              <button class="btn btn-primary"
+                th:text="#{button.addCategory}">
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</html>
